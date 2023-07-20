@@ -10,7 +10,7 @@ Here is a brief overview of the structure of this repository:
 Within the scope of the Bachelor's thesis, the most important areas are:
     - **.\core\DTNHost**: Functions for generating the required data for the protocol are added here.
     - **.\routing\SprayLearnWaitRouter**: Contains the specific routing logic of the proposed protocol.
-    - **.\R**: Contains the R scripts for Clusternalaysis and Reinforcement learning.
+    - **.\R**: Contains the R scripts for Cluster Analaysis and Reinforcement learning.
 
 ## Router Settings
 The proposed routing protocol for the Bachelor's thesis, *SprayLearnWait*, requires the following settings parameters for the simulation:
