@@ -1,0 +1,20 @@
+Message stats for scenario ThesisSimulation-Helsinki-ProphetRouter-Group.nrofHosts40-Scenario.endTime86400-Seed-1
+sim_time: 86400.0000
+created: 2925
+started: 1424934
+relayed: 1394019
+aborted: 30900
+dropped: 1394787
+removed: 0
+delivered: 944
+delivery_prob: 0.3227
+response_prob: 0.0000
+overhead_ratio: 1475.7150
+latency_avg: 1643.1982
+latency_med: 1106.4000
+hopcount_avg: 7.3146
+hopcount_med: 5
+buffertime_avg: 70.0758
+buffertime_med: 16.1000
+rtt_avg: NaN
+rtt_med: NaN

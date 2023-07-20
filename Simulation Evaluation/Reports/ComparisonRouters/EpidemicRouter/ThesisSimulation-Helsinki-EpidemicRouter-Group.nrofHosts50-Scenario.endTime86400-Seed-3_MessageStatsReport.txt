@@ -1,0 +1,20 @@
+Message stats for scenario ThesisSimulation-Helsinki-EpidemicRouter-Group.nrofHosts50-Scenario.endTime86400-Seed-3
+sim_time: 86400.0000
+created: 2930
+started: 986141
+relayed: 924719
+aborted: 61395
+dropped: 925673
+removed: 0
+delivered: 589
+delivery_prob: 0.2010
+response_prob: 0.0000
+overhead_ratio: 1568.9813
+latency_avg: 1337.3211
+latency_med: 860.7000
+hopcount_avg: 9.7012
+hopcount_med: 7
+buffertime_avg: 130.5783
+buffertime_med: 68.6000
+rtt_avg: NaN
+rtt_med: NaN

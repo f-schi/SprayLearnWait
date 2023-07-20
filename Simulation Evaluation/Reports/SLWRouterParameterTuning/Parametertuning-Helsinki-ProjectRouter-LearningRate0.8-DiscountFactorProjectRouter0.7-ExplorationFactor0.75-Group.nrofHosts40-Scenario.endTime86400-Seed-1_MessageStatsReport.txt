@@ -1,0 +1,20 @@
+Message stats for scenario Parametertuning-Helsinki-ProjectRouter-LearningRate0.8-DiscountFactorProjectRouter0.7-ExplorationFactor0.75-Group.nrofHosts40-Scenario.endTime86400-Seed-1
+sim_time: 86400.0000
+created: 2925
+started: 6550
+relayed: 6290
+aborted: 260
+dropped: 5197
+removed: 1036
+delivered: 2257
+delivery_prob: 0.7716
+response_prob: 0.0000
+overhead_ratio: 1.7869
+latency_avg: 4278.4945
+latency_med: 3159.1000
+hopcount_avg: 1.2508
+hopcount_med: 1
+buffertime_avg: 8859.9837
+buffertime_med: 8683.0000
+rtt_avg: NaN
+rtt_med: NaN

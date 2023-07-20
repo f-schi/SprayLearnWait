@@ -1,0 +1,20 @@
+Message stats for scenario ThesisSimulation-Helsinki-FirstContactRouter-Group.nrofHosts20-Scenario.endTime86400-Seed-2
+sim_time: 86400.0000
+created: 2928
+started: 56189
+relayed: 53576
+aborted: 2611
+dropped: 1629
+removed: 53576
+delivered: 1196
+delivery_prob: 0.4085
+response_prob: 0.0000
+overhead_ratio: 43.7960
+latency_avg: 2263.7360
+latency_med: 1571.9000
+hopcount_avg: 16.2249
+hopcount_med: 14
+buffertime_avg: 152.7298
+buffertime_med: 63.1000
+rtt_avg: NaN
+rtt_med: NaN

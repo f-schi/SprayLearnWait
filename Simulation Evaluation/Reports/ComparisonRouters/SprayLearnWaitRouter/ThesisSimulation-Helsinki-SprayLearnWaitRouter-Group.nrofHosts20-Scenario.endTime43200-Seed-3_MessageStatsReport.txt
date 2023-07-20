@@ -1,0 +1,20 @@
+Message stats for scenario ThesisSimulation-Helsinki-SprayLearnWaitRouter-Group.nrofHosts20-Scenario.endTime43200-Seed-3
+sim_time: 43200.1000
+created: 1461
+started: 1956
+relayed: 1905
+aborted: 51
+dropped: 1618
+removed: 332
+delivered: 954
+delivery_prob: 0.6530
+response_prob: 0.0000
+overhead_ratio: 0.9969
+latency_avg: 3430.7479
+latency_med: 2398.1000
+hopcount_avg: 1.2107
+hopcount_med: 1
+buffertime_avg: 7926.0419
+buffertime_med: 7529.9000
+rtt_avg: NaN
+rtt_med: NaN
