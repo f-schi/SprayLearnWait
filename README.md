@@ -18,19 +18,19 @@ The proposed routing protocol for the Bachelor's thesis, *SprayLearnWait*, requi
 - **executionLogging**: Boolean value that determines whether processed data should be logged. This is also used to verify the correct information processing in the protocol.
 
 - **directionMode** (Factor{1,2,3}): Determines in which direction the velocity should point.
-    1 = Running average of movement direction
-    2 = Direction towards the average location
-    3 = Direction towards the destination
+    - 1 = Running average of movement direction
+    - 2 = Direction towards the average location
+    - 3 = Direction towards the destination
 
 - **runningAvgWeight**: Sets the weighting of new readings in the calculation of the running average. The default value is 0, which corresponds to no weighting.
 
 - Initial configuration of **clusterHeight** and **waitTime** (or **sleepTime**).
 
 - The following parameters define the states of the Q-Table:
-    **minSleepTime**, **maxSleepTime**, **incSleepTime**,
-    **minClusterHeight**, **maxClusterHeight**, **incClusterHeight**.
+    - **minSleepTime**, **maxSleepTime**, **incSleepTime**,
+    - **minClusterHeight**, **maxClusterHeight**, **incClusterHeight**.
 
 - The following settings define the alpha, gamma, and epsilon of Q-learning:
-    **rlLearningRate**
-    **rlDiscountFactor**
-    **rlExplorationFactor**
+    - **rlLearningRate**
+    - **rlDiscountFactor**
+    - **rlExplorationFactor**
