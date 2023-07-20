@@ -1,6 +1,6 @@
 # Code Submission - Bachelor Thesis Frederick Schindlegger
 
-Welcome to the repository for my Bachelor's thesis on the topic of **Data Efficient Routing in Opportunistic Networks based on mobility prediction and reinforcement learning**. I have developed the routing protocol *SprayLearnWait* for use in opportunistic networks. This repository contains the implementation and embedding of the protocol in the ONE simulator, the reports of the conducted simulation series, and their analysis.
+Welcome to the repository for my Bachelor's thesis on the topic of **Data Efficient Routing in Opportunistic Networks based on mobility prediction and reinforcement learning**, for which I have developed the opportunistic routing protocol *SprayLearnWait*. This repository contains the implementation and embedding of the protocol in the ONE simulator, the reports of the conducted simulation series, and their analysis.
 
 ## Navigation
 Here is a brief overview of the structure of this repository:
@@ -17,14 +17,16 @@ The proposed routing protocol for the Bachelor's thesis, *SprayLearnWait*, requi
 
 - **executionLogging**: Boolean value that determines whether processed data should be logged. This is also used to verify the correct information processing in the protocol.
 
-- **directionMode** (Factor{1,2,3}): Determines in which direction the velocity should point.
+- **directionMode**: Determines in which direction the velocity should point.
     - 1 = Running average of movement direction
     - 2 = Direction towards the average location
     - 3 = Direction towards the destination
 
 - **runningAvgWeight**: Sets the weighting of new readings in the calculation of the running average. The default value is 0, which corresponds to no weighting.
 
-- Initial configuration of **clusterHeight** and **waitTime** (or **sleepTime**).
+- Initial configuration of clusterHeight and waitTime (denoted as sleepTime).
+    - **clusterHeight**
+    - **sleepTime**
 
 - The following parameters define the states of the Q-Table:
     - **minSleepTime**, **maxSleepTime**, **incSleepTime**,
