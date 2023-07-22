@@ -40,3 +40,21 @@ The proposed routing protocol for the Bachelor's thesis, *SprayLearnWait*, requi
     - **rlLearningRate**(Double)
     - **rlDiscountFactor**(Double)
     - **rlExplorationFactor**(Double)
+
+      
+An examplary setup of the SprayLearnWaitRouter is given below:
+
+    SprayLearnWaitRouter.directionMode = 1
+    SprayLearnWaitRouter.runningAvgWeight = 100.0
+    SprayLearnWaitRouter.clusterHeight = 1.0  
+    SprayLearnWaitRouter.sleepTime = 2000.0
+    SprayLearnWaitRouter.executionLogging = false
+    SprayLearnWaitRouter.minSleepTime = 100.0
+    SprayLearnWaitRouter.maxSleepTime = 4000.0
+    SprayLearnWaitRouter.incSleepTime = 100.0
+    SprayLearnWaitRouter.minClusterHeight = 0.5
+    SprayLearnWaitRouter.maxClusterHeight = 1.25
+    SprayLearnWaitRouter.incClusterHeight = 0.05
+    SprayLearnWaitRouter.rlLearningRate = 0.8
+    SprayLearnWaitRouter.rlDiscountFactor = 0.7
+    SprayLearnWaitRouter.rlExplorationFactor = 0.5
