@@ -63,4 +63,32 @@ for (feature in features) {
   plot(plot)
 }
 
+# generate linear models
+data.total <- rbind(data10,data20,data30,data40,data50)
+
+summary(lm(reward ~ SimClock, data10))
+summary(lm(reward ~ SimClock, data20))
+summary(lm(reward ~ SimClock, data30))
+summary(lm(reward ~ SimClock, data40))
+summary(lm(reward ~ SimClock, data50))
+summary(lm(reward ~ SimClock, data.total))
+summary(lm(reward ~ iteration, data10))
+summary(lm(reward ~ iteration, data20))
+summary(lm(reward ~ iteration, data30))
+summary(lm(reward ~ iteration, data40))
+summary(lm(reward ~ iteration, data50))
+summary(lm(reward ~ iteration, data.total))
+
+summary(lm(waitTime ~ SimClock, data10))
+summary(lm(waitTime ~ SimClock, data20))
+summary(lm(waitTime ~ SimClock, data30))
+summary(lm(waitTime ~ SimClock, data40))
+summary(lm(waitTime ~ SimClock, data50))
+summary(lm(waitTime ~ SimClock, data.total))
+summary(lm(waitTime ~ iteration, data10))
+summary(lm(waitTime ~ iteration, data20))
+summary(lm(waitTime ~ iteration, data30))
+summary(lm(waitTime ~ iteration, data40))
+summary(lm(waitTime ~ iteration, data50))
+summary(lm(waitTime ~ iteration, data.total))
 

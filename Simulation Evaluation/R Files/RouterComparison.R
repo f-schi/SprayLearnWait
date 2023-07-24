@@ -1,3 +1,10 @@
+# import packages
+library(tidyverse)
+
+#load data
+data <- read.csv("RouterComparisonAverages.csv")
+
+#plotting function
 barchartplotter <- function(in.data, time, feature) {
   data <- in.data %>% filter(time == SimTime)
   if (feature == "delivery_prob") {
@@ -50,13 +57,11 @@ barchartplotter <- function(in.data, time, feature) {
   }
 }
 
-library(tidyverse)
-
-data <- read.csv("RouterComparisonAverages.csv")
-
+# set features to be plotted
 days <- c('2 days')
 features <- c("delivery_prob", "overhead_ratio", "latency_avg", "dropped_removed_messages")
 
+# generate plots
 for (f in features) {
   for (d in days) {
     print(d)
@@ -65,14 +70,6 @@ for (f in features) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-ggsave("mtcars.png")
+# conduct pearson correlation tests
+cor.test(data$delivery_prob.mean,data$latency_avg.mean)
+cor.test(data$overhead_ratio.mean,data$dropped_removed_messages.mean)
