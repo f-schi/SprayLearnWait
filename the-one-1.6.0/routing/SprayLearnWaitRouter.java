@@ -27,12 +27,13 @@ public class SprayLearnWaitRouter extends ActiveRouter {
      * @param s The settings object
      */
 
-    /**
-     * F-Schi
-     * Adjustable Parameters
-     */
+
 
     public static final String PROJECT_ROUTER = "SprayLearnWaitRouter";
+
+    /**
+     * Router Parameters
+     */
 
     //Movement Parameter
     protected Integer directionMode;
@@ -41,7 +42,7 @@ public class SprayLearnWaitRouter extends ActiveRouter {
     protected Double clusterHeight;
 
     //Hibernation Parameters
-    protected Double sleepTime;
+    protected Double waitTime;
     protected Double wakeTime;
 
     //RL Reward Parameters
@@ -51,12 +52,13 @@ public class SprayLearnWaitRouter extends ActiveRouter {
 
     //Logging Parameter
     protected Boolean executionLogging;
+    protected String loggingPath;
 
     //RL Q-Table Parameters
     protected List<Double> Qtable;
-    protected Double minSleepTime;
-    protected Double maxSleepTime;
-    protected Double incSleepTime;
+    protected Double minWaitTime;
+    protected Double maxWaitTime;
+    protected Double incWaitTime;
     protected Double minClusterHeight;
     protected Double maxClusterHeight;
     protected Double incClusterHeight;
@@ -77,11 +79,12 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         this.directionMode = projectSettings.getInt("directionMode");
         this.runningAvgWeight = projectSettings.getDouble("runningAvgWeight");
         this.clusterHeight = projectSettings.getDouble("clusterHeight");
-        this.sleepTime = projectSettings.getDouble("sleepTime");
+        this.waitTime = projectSettings.getDouble("waitTime");
         this.executionLogging = projectSettings.getBoolean("executionLogging");
-        this.minSleepTime = projectSettings.getDouble("minSleepTime");
-        this.maxSleepTime = projectSettings.getDouble("maxSleepTime");
-        this.incSleepTime = projectSettings.getDouble("incSleepTime");
+        this.loggingPath = projectSettings.getSetting("loggingPath");
+        this.minWaitTime = projectSettings.getDouble("minWaitTime");
+        this.maxWaitTime = projectSettings.getDouble("maxWaitTime");
+        this.incWaitTime = projectSettings.getDouble("incWaitTime");
         this.minClusterHeight = projectSettings.getDouble("minClusterHeight");
         this.maxClusterHeight = projectSettings.getDouble("maxClusterHeight");
         this.incClusterHeight = projectSettings.getDouble("incClusterHeight");
@@ -90,8 +93,8 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         this.rlExplorationFactor = projectSettings.getDouble("rlExplorationFactor");
 
         //initialize other parameters
-        this.wakeTime = SimClock.getTime() + sleepTime;
-        this.sizeQTable = (((maxSleepTime-minSleepTime)/incSleepTime)+1)
+        this.wakeTime = SimClock.getTime() + waitTime;
+        this.sizeQTable = (((maxWaitTime - minWaitTime)/ incWaitTime)+1)
                 * (((maxClusterHeight-minClusterHeight)/incClusterHeight)+1);
         this.Qtable = new ArrayList<Double>(Collections.nCopies(sizeQTable.intValue(), 0.0));
         this.averageClusters = 0.0;
@@ -112,10 +115,10 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         this.directionMode = r.directionMode;
         this.runningAvgWeight = r.runningAvgWeight;
         this.clusterHeight = r.clusterHeight;
-        this.sleepTime = r.sleepTime;
-        this.minSleepTime = r.minSleepTime;
-        this.maxSleepTime = r.maxSleepTime;
-        this.incSleepTime = r.incSleepTime;
+        this.waitTime = r.waitTime;
+        this.minWaitTime = r.minWaitTime;
+        this.maxWaitTime = r.maxWaitTime;
+        this.incWaitTime = r.incWaitTime;
         this.minClusterHeight = r.minClusterHeight;
         this.maxClusterHeight = r.maxClusterHeight;
         this.incClusterHeight = r.incClusterHeight;
@@ -130,9 +133,12 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
         this.renjin = factory.getScriptEngine();
         this.executionLogging = r.executionLogging;
+        this.loggingPath = r.loggingPath;
     }
 
-
+    /**
+     * update is called by DTNHost, executes Routing Iteration of Protocol
+     */
     @Override
     public void update() {
         super.update();
@@ -165,13 +171,19 @@ public class SprayLearnWaitRouter extends ActiveRouter {
             this.performRL(rlReward);
 
             // Set wakeTime for next iteration
-            this.wakeTime = SimClock.getTime() + this.sleepTime;
+            this.wakeTime = SimClock.getTime() + this.waitTime;
 
-            //Write internal parameters to CSV (Only for Analysis Purposes)
-            writeParametersToCSV(rlReward);
+            if(executionLogging) {
+                //Write internal parameters to CSV (Only for Analysis Purposes)
+                writeParametersToCSV(rlReward);
+            }
+
         }
     }
 
+    /**
+     * retrieve features Speed and Direction from connected DTNhosts
+     */
     private List getClusterFeatures() {
 
         //list of connected Hosts
@@ -201,6 +213,9 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         return clusterFeatures;
     }
 
+    /**
+     * invoke ClusterAnalysis.R to perform cluster analysis and return results
+     */
     public List performClusterAnalysis(List<List> clusterFeatures, Double clusterHeight) {
 
         Vector resultsClusterAnalysis = null;
@@ -225,6 +240,10 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         return clusters;
     }
 
+    /**
+     * takes list of assigned cluster and distributes messages among cluster member according to
+     * round-robin principle. Transimission of assigned message bundles are then tried to specific connections.
+     */
     private void deliverMessagesToClusters(List <Integer> clusters) {
 
         //list of connections
@@ -318,6 +337,10 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         }
     }
 
+    /**
+     * perform message distribution after round-robin principle for the case of home cluster.
+     * Here messages are dropped locally if transmitted or already existing with other cluster member.
+     */
     private List<List> deliveryHomeCluster(List<DTNHost> hostsCurrentBatch,
                                            List<Integer> indicesCurrentBatch,
                                            List<Integer> hostsFBSCurrentBatch,
@@ -385,6 +408,10 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         }
         return messagesDestinations;
     }
+
+    /**
+     * perform message distribution after round-robin principle for the case of foreign cluster.
+     */
     private List<List> deliveryForeignCluster(List<DTNHost> hostsCurrentBatch,
                                               List<Integer> indicesCurrentBatch,
                                               List<Integer> hostsFBSCurrentBatch,
@@ -430,6 +457,10 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         }
         return messagesDestinations;
     }
+
+    /**
+     * calculate reward signal of reinforcement learning.
+     */
     private Double computeRewards() {
         if(this.executionLogging) {System.out.println("-Evaluation Phase-");}
 
@@ -438,7 +469,7 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         if(load > 1) load = 1;
         double rewardDF;
         /**
-         * OLD REWARD FUNCTION (DEPCRECATED)
+         * Alternative REWARD FUNCTION (DEPCRECATED)
          *         double rewardDF = -1.023595 + 16.14673*load - 77.26101*Math.pow(load, 2) +
          *                 183.0286*Math.pow(load, 3) - 190.181*Math.pow(load, 4) + 68.26667*Math.pow(load, 5);
          */
@@ -482,6 +513,9 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         return reward;
     }
 
+    /**
+     * invoke ReinforcementLearning.R to update Q-Table and decide next action
+     */
     private void performRL(Double routingPhaseReward) {
 
         //execute ReinforcementLearning.R script
@@ -491,19 +525,19 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         if(this.executionLogging) {
             System.out.println("RL Input QTable with size " + this.Qtable.size() + ": " + this.Qtable);
             System.out.println("RL Input ClusterHeight: " + this.clusterHeight);
-            System.out.println("RL Input SleepTime: " + this.sleepTime);
+            System.out.println("RL Input WaitTime: " + this.waitTime);
             System.out.println("RL InputReward: " + routingPhaseReward);
         }
 
 
         try {
             renjin.put("Qtable", this.Qtable);
-            renjin.put("currentSleepTime", this.sleepTime);
+            renjin.put("currentWaitTime", this.waitTime);
             renjin.put("currentClusterHeight", this.clusterHeight);
             renjin.put("reward", routingPhaseReward);
-            renjin.put("minSleepTime", this.minSleepTime);
-            renjin.put("maxSleepTime", this.maxSleepTime);
-            renjin.put("incSleepTime", this.incSleepTime);
+            renjin.put("minWaitTime", this.minWaitTime);
+            renjin.put("maxWaitTime", this.maxWaitTime);
+            renjin.put("incWaitTime", this.incWaitTime);
             renjin.put("minClusterHeight", this.minClusterHeight);
             renjin.put("maxClusterHeight", this.maxClusterHeight);
             renjin.put("incClusterHeight", this.incClusterHeight);
@@ -520,13 +554,13 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         //Transform Output Vector from .R file to local parameter type
         List <Double> newQtable = new ArrayList<>();
         Double newClusterHeight = 0.0;
-        Double newSleepTime = 0.0;
+        Double newWaitTime = 0.0;
         for (int i = 0; i < resultsReinforcementLearning.length(); i++) {
             if(i == resultsReinforcementLearning.length()-2) {
                 newClusterHeight = resultsReinforcementLearning.getElementAsDouble(i);
             }
             else if(i == resultsReinforcementLearning.length()-1) {
-                newSleepTime = resultsReinforcementLearning.getElementAsDouble(i);
+                newWaitTime = resultsReinforcementLearning.getElementAsDouble(i);
             } else {
                 newQtable.add(resultsReinforcementLearning.getElementAsDouble(i));
             }
@@ -535,14 +569,14 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         if(this.executionLogging) {
             System.out.println("RL Output QTable with size " + newQtable.size() + ": " + newQtable );
             System.out.println("RL Output ClusterHeight: " + newClusterHeight);
-            System.out.println("RL Output SleepTime: " + newSleepTime);
+            System.out.println("RL Output WaitTime: " + newWaitTime);
 
         }
 
         //Update local Parameters according to new Q-State
         this.Qtable = newQtable;
         this.clusterHeight = newClusterHeight;
-        this.sleepTime = newSleepTime;
+        this.waitTime = newWaitTime;
     }
 
 
@@ -559,6 +593,7 @@ public class SprayLearnWaitRouter extends ActiveRouter {
         }
         return(average);
     }
+
 
     private void updateClusteringPerformanceMetrics(List <Integer> clusters){
         double currentClusterCount = clusters.stream().distinct().count();
@@ -638,12 +673,15 @@ public class SprayLearnWaitRouter extends ActiveRouter {
 
     private void writeParametersToCSV(Double reward) {
         SimScenario simScenario = SimScenario.getInstance();
-        String filePath = "C:/Users/fschi/Documents/BachelorArbeit/the-one-1.6.0/reports/SprayLearnWaitRouterInternalAnalysis/20nodes/"+simScenario.getName()+".csv";
+        System.out.println(this.loggingPath);
+        String filePath = this.loggingPath + "\\" + simScenario.getName() + ".csv";
+        System.out.println(filePath);
         File yourFile = new File(filePath);
         if(!yourFile.isFile()){
             try {
                 yourFile.createNewFile();
-                Files.write(Paths.get(filePath), "Node,SimClock,CoordX,CoordY,sleepTime,clusterHeight,avgCluster, avgNodesPerCluster, FreeBufferSpacePercent, reward, iteration".getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get(filePath), ("Node,SimClock,CoordX,CoordY,waitTime,clusterHeight,avgCluster, " +
+                        "avgNodesPerCluster, FreeBufferSpacePercent, reward, iteration").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -656,7 +694,7 @@ public class SprayLearnWaitRouter extends ActiveRouter {
                         + SimClock.getTime() + ","
                         + this.getHost().getLocation().getX() + ","
                         + this.getHost().getLocation().getY() + ","
-                        + this.sleepTime + ","
+                        + this.waitTime + ","
                         + this.clusterHeight + ","
                         + this.averageClusters + ","
                         + this.averageNodesPerCluster + ","

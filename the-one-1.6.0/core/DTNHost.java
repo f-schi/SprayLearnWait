@@ -41,8 +41,7 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
 	/**
-	 * F-Schi
-	 * Project Parameters
+	 * SprayLearnWait Parameters
 	 */
 	private Double direction;
 	private Double runningAvgOfSpeed;
@@ -89,8 +88,7 @@ public class DTNHost implements Comparable<DTNHost> {
 		this.net = new ArrayList<NetworkInterface>();
 
 		/**
-		 * F-Schi
-		 * Project Parameters
+		 * initialize SprayLearnWait Parameters
 		 */
 		this.direction = new Double (0.0);
 		this.runningAvgOfSpeed = new Double (0.0);
@@ -453,8 +451,7 @@ public class DTNHost implements Comparable<DTNHost> {
 		this.location.translate(dx, dy);
 
 		/**
-		 * F-Schi
-		 * Project Router Parameter Update
+		 * update SprayLearnWait Parameters
 		 */
 		this.runningAvgCounter += 1;
 		this.direction = calcAngleFromXAndY(dx, dy);

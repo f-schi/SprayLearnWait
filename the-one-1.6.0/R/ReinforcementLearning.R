@@ -1,12 +1,13 @@
 #Build States Matrix
-sleepTime <- seq(minSleepTime, maxSleepTime, by = incSleepTime)
+
+waitTime <- seq(minWaitTime, maxWaitTime, by = incWaitTime)
 clusterHeight <- seq(minClusterHeight,maxClusterHeight, by=incClusterHeight)
 
-statesTable <- data.frame(clusterHeight= merge(clusterHeight,sleepTime)[1]$x,
-                          sleepTime = merge(clusterHeight,sleepTime)[2]$y)
+statesTable <- data.frame(clusterHeight= merge(clusterHeight,waitTime)[1]$x,
+                          waitTime = merge(clusterHeight,waitTime)[2]$y)
 statesMatrix <- matrix(seq(1,nrow(statesTable),1), 
                        nrow = length(clusterHeight), 
-                       ncol= length(sleepTime))
+                       ncol= length(waitTime))
 
 #Returns all possible states reachable from current state with possible actions
 computeNextReachableStates <- function(c, tab, mat) {
@@ -28,12 +29,10 @@ computeNextReachableStates <- function(c, tab, mat) {
   return(n)
 }
 
-
 #load Qtable and State of past routing phase
-Q <- matrix(unlist(Qtable), nrow = length(clusterHeight), ncol= length(sleepTime)) #"matrix(inputQTable[list], nrow = length(clusterHeight), ncol= length(sleepTime))"
+Q <- matrix(unlist(Qtable), nrow = length(clusterHeight), ncol= length(waitTime))
 currentState <- which(statesTable$clusterHeight == currentClusterHeight
-                      & statesTable$sleepTime == currentSleepTime)
-
+                      & statesTable$waitTime == currentWaitTime)
 
 #compute list of possible next states
 nextStates <- computeNextReachableStates(currentState, tab=statesTable, mat=statesMatrix)
@@ -50,11 +49,11 @@ if (coinToss < explorationFactor) {
     nextState <- sample(nextState, 1)
   }
 }
-
+print("Test5")
 # Update Q values for next states.
 Q[currentState] <- Q[currentState] + learningRate * (reward + discountFactor * max(Q[computeNextReachableStates(nextState, tab=statesTable, mat=statesMatrix)])-Q[currentState])
 
-# output updated Qtable, sleepTime and clusterHeight values
-output <- append(as.vector(Q),c(statesTable[nextState,]$clusterHeight,statesTable[nextState,]$sleepTime))
+# output updated Qtable, waitTime and clusterHeight values
+output <- append(as.vector(Q),c(statesTable[nextState,]$clusterHeight,statesTable[nextState,]$waitTime))
 
 
