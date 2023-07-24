@@ -15,7 +15,8 @@ Within the scope of the Bachelor's thesis, the most important areas are:
 ## Router Settings
 The proposed routing protocol for the Bachelor's thesis, *SprayLearnWait*, requires the following settings parameters for the simulation:
 
-- **executionLogging**(Boolean): determines whether processed data should be logged. This is also used to verify the correct information processing in the protocol.
+- **executionLogging**(Boolean): Determines whether processed data should be logged. This is also used to verify the correct information processing in the protocol.
+- **loggingPath**(String): Path of generated data for in-depth process logging
 
 - **directionMode**(Factor{1,2,3}): Determines in which direction the velocity should point.
     - 1 = Running average of movement direction
@@ -48,7 +49,8 @@ An examplary setup of the SprayLearnWaitRouter is given below:
     SprayLearnWaitRouter.runningAvgWeight = 100.0
     SprayLearnWaitRouter.clusterHeight = 1.0  
     SprayLearnWaitRouter.sleepTime = 2000.0
-    SprayLearnWaitRouter.executionLogging = false
+    SprayLearnWaitRouter.executionLogging = true
+    SprayLearnWaitRouter.loggingPath = C:\\Users\\fschi\\Desktop
     SprayLearnWaitRouter.minSleepTime = 100.0
     SprayLearnWaitRouter.maxSleepTime = 4000.0
     SprayLearnWaitRouter.incSleepTime = 100.0
