@@ -1,5 +1,6 @@
 # import packages
 library(tidyverse)
+library(envalysis)
 
 #load data
 data <- read.csv("RouterComparisonAverages.csv")

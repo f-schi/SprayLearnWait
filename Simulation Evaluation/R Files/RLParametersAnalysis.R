@@ -1,5 +1,6 @@
 #import packages
 library(tidyverse)
+library(envalysis)
 
 #load data
 data10 <- read.csv("ThesisSimulation-Helsinki-SprayLearnWaitRouter-Group.nrofHosts10-Scenario.endTime172800.csv")
@@ -42,7 +43,6 @@ meanValueBySimClock <- function(feature, interval) {
 
 #select features to be plotted
 features <- c("waitTime","clusterHeight","avgCluster","avgNodesPerCluster","FreeBufferSpacePercent","reward")
-features <- c("waitTime")
 #plot line graph
 for (feature in features) {
   ylab <- str_replace(feature, "^\\w{1}", toupper)
